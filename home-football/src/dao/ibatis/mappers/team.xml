@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="team">
+
+	<typeAlias alias="Team" type="vo.Team"/>
+	<typeAlias alias="Criteria" type="vo.Criteria"/>
+
+	<select id="getTeamsByLeagueNo" parameterClass="int" resultClass="Team">
+		select 
+			fb_team_no		no	
+			,fb_team_name	name
+			,fb_league_no 	"league.no"
+		from fb_team
+		where fb_league_no = #value#
+		order by fb_team_name
+	</select>
+	
+	<select id="getTeamByTeamNo" parameterClass="int" resultClass="Team">
+		select 
+			fb_team_no		no	
+			,fb_team_name	name
+			,fb_league_no 	"league.no"
+		from fb_team
+		where fb_team_no = #value#
+	</select>
+</sqlMap>

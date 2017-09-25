@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="league">
+
+	<typeAlias alias="League" type="vo.League"/>
+	<typeAlias alias="Criteria" type="vo.Criteria"/>
+
+	<select id="getLeguesByNationNo" parameterClass="int" resultClass="League">
+		select 
+			fb_league_no		no
+			,fb_league_name		name
+			,fb_league_type		type
+			,fb_nation_no		"nation.no"
+		from fb_league
+		where fb_nation_no = #value#
+		order by fb_league_no	
+	</select>
+</sqlMap>

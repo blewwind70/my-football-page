@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	
+	<!-- 각 mapper들의 namespace를 사용하겠다고 설정! -->
+	<settings useStatementNamespaces="true"/>
+	<!-- Configure a built-in transaction manager. If you're using an app server, 
+		you probably want to use its transaction manager and a managed datasource -->
+		
+	<!-- Connection Pool 생성에 필요한 DB연결정보 설정 -->	
+	<transactionManager type="JDBC" commitRequired="false">
+		<dataSource type="SIMPLE">
+			<property name="JDBC.Driver" value="oracle.jdbc.OracleDriver" />
+			<property name="JDBC.ConnectionURL" value="jdbc:oracle:thin:@localhost:1521:xe" />
+			<property name="JDBC.Username" value="hr" />
+			<property name="JDBC.Password" value="zxcv1234" />
+		</dataSource>
+	</transactionManager>
+
+	<!-- List the SQL Map XML files. They can be loaded from the classpath, 
+		as they are here (com.domain.data...) -->
+	<sqlMap resource="dao/ibatis/mappers/match.xml" />
+	<sqlMap resource="dao/ibatis/mappers/league.xml" />
+	<sqlMap resource="dao/ibatis/mappers/team.xml" />
+
+
+	<!-- List more here... <sqlMap resource="com/mydomain/data/Order.xml"/> 
+		<sqlMap resource="com/mydomain/data/Documents.xml"/> -->
+
+</sqlMapConfig>
