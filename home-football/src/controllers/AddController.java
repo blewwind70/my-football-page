@@ -24,7 +24,7 @@ public class AddController implements Controller {
 		
 		try {
 			String notTimeDate = request.getParameter("date");
-			Date matchDate = DateUtils.changeStrToDate(notTimeDate + request.getParameter("time"));
+			Date matchdate = DateUtils.changeStrToDate(notTimeDate + request.getParameter("time"));
 			int leagueNo = StringUtils.stringToNumber(request.getParameter("league"));
 			int round = StringUtils.stringToNumber(request.getParameter("round"));
 
@@ -32,33 +32,33 @@ public class AddController implements Controller {
 			league.setNo(leagueNo);
 			
 			MatchInfo matchInfo = new MatchInfo();
-			matchInfo.setLeague(league);
-			matchInfo.setMatchDate(matchDate);
 			matchInfo.setRound(round);
+			matchInfo.setMatchdate(matchdate);
+			matchInfo.setLeague(league);
 			
 			MatchDao matchDao = MatchDao.getInstance();
-			MatchInfo searchMatch = matchDao.getMatchInfoByMatch(matchInfo);
-			
-			if(searchMatch == null) {
-				int infoSeq = matchDao.getMatchInfoSequence();
-				matchInfo.setNo(infoSeq);
+			MatchInfo searchMatchInfo = matchDao.getMatchInfoByMatchInfo(matchInfo);
+			if(searchMatchInfo == null) {
 				matchDao.addMatchInfo(matchInfo);
-				searchMatch = matchDao.getMatchInfoByMatch(matchInfo);
+				searchMatchInfo  =  matchDao.getMatchInfoByMatchInfo(matchInfo);
 			}
 			
-			int hometeamNo = StringUtils.stringToNumber(request.getParameter("hometeam"));
-			int awayteamNo = StringUtils.stringToNumber(request.getParameter("awayteam"));
+			String[] hometeamNoList = request.getParameter("hometeam").split(",");
+			String[] awayteamNoList = request.getParameter("awayteam").split(",");
 			
 			TeamDao teamDao = TeamDao.getInstance();
-			Team homeTeam = teamDao.getTeamByTeamNo(hometeamNo);
-			Team awayTeam = teamDao.getTeamByTeamNo(awayteamNo);
-			
-			Match matchTeam = new Match();
-			matchTeam.setHomeTeam(homeTeam);
-			matchTeam.setAwayTeam(awayTeam);
-			matchTeam.setMatchInfo(searchMatch);
-			
-			matchDao.addMatchTeam(matchTeam);
+			for(int i=0; i<hometeamNoList.length; i++) {
+				int hometeamNo = StringUtils.stringToNumber(hometeamNoList[i]);
+				int awayteamNo = StringUtils.stringToNumber(awayteamNoList[i]);
+				Team hometeam = teamDao.getTeamByTeamNo(hometeamNo);
+				Team awayteam = teamDao.getTeamByTeamNo(awayteamNo);
+				
+				Match match = new Match();
+				match.setMatchInfo(searchMatchInfo);
+				match.setHometeam(hometeam);
+				match.setAwayteam(awayteam);
+				matchDao.addMatch(match);
+			}
 			
 			return "redirect:list.home?matchdate=" + notTimeDate;
 		} catch (ParseException e) {

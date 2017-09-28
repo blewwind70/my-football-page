@@ -14,10 +14,10 @@ public class DetailController implements Controller {
 
 	@Override
 	public String process(HttpServletRequest request, HttpServletResponse response) throws SQLException {
-		int matchTeamNo = StringUtils.stringToNumber(request.getParameter("mno"));
+		int matchNo = StringUtils.stringToNumber(request.getParameter("mno"));
 		
-		Match matchTeam = MatchDao.getInstance().getMatchByMatchNo(matchTeamNo);
-		request.setAttribute("matchTeam", matchTeam);
+		Match match = MatchDao.getInstance().getMatchByMatchNo(matchNo);
+		request.setAttribute("match", match);
 		
 		return "list/detail.jsp";
 	}

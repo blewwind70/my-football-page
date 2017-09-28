@@ -9,7 +9,7 @@
 	<typeAlias alias="League" type="vo.League"/>
 	<typeAlias alias="Criteria" type="vo.Criteria"/>
 
-	<select id="getLeguesByNationNo" parameterClass="int" resultClass="League">
+	<select id="getLeaguesByNationNo" parameterClass="int" resultClass="League">
 		select 
 			fb_league_no		no
 			,fb_league_name		name

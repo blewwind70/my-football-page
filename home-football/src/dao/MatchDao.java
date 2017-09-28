@@ -20,16 +20,12 @@ public class MatchDao {
 		IbatisUtils.getSqlMapClient().insert("match.addMatchInfo", matchInfo);
 	}
 	
-	public void addMatchTeam(Match matchTeam) throws SQLException {
-		IbatisUtils.getSqlMapClient().insert("match.addMatchTeam", matchTeam);
+	public void addMatch(Match match) throws SQLException {
+		IbatisUtils.getSqlMapClient().insert("match.addMatch", match);
 	}
 	
-	public Integer getMatchInfoSequence() throws SQLException {
-		return (Integer) IbatisUtils.getSqlMapClient().queryForObject("match.getMatchInfoSequence");
-	}
-	
-	public Match getMatchByMatchNo(int matchTeamNo) throws SQLException {
-		return (Match) IbatisUtils.getSqlMapClient().queryForObject("match.getMatchByMatchNo", matchTeamNo);
+	public Match getMatchByMatchNo(int matchNo) throws SQLException {
+		return (Match) IbatisUtils.getSqlMapClient().queryForObject("match.getMatchByMatchNo", matchNo);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -37,11 +33,11 @@ public class MatchDao {
 		return IbatisUtils.getSqlMapClient().queryForList("match.getMatchesByDate", matchDate);
 	}
 	
-	public MatchInfo getMatchInfoByMatch(MatchInfo matchInfo) throws SQLException {
-		return (MatchInfo) IbatisUtils.getSqlMapClient().queryForObject("match.getMatchInfoByMatch", matchInfo);
+	public MatchInfo getMatchInfoByMatchInfo(MatchInfo matchInfo) throws SQLException {
+		return (MatchInfo) IbatisUtils.getSqlMapClient().queryForObject("match.getMatchInfoByMatchInfo", matchInfo);
 	}
 	
-	public void updateMatchTeamByMatchNo(Match matchTeam) throws SQLException {
-		IbatisUtils.getSqlMapClient().update("match.updateMatchTeamByMatchNo", matchTeam);
+	public void updateMatchByMatchNo(Match match) throws SQLException {
+		IbatisUtils.getSqlMapClient().update("match.updateMatchByMatchNo", match);
 	}
 }

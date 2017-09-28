@@ -7,8 +7,8 @@ public class Match {
 	private int homeScore;
 	private int awayScore;
 	private MatchInfo matchInfo;
-	private Team homeTeam;
-	private Team awayTeam;
+	private Team hometeam;
+	private Team awayteam;
 	
 	public int getNo() {
 		return no;
@@ -40,17 +40,17 @@ public class Match {
 	public void setMatchInfo(MatchInfo matchInfo) {
 		this.matchInfo = matchInfo;
 	}
-	public Team getHomeTeam() {
-		return homeTeam;
+	public Team getHometeam() {
+		return hometeam;
 	}
-	public void setHomeTeam(Team homeTeam) {
-		this.homeTeam = homeTeam;
+	public void setHometeam(Team hometeam) {
+		this.hometeam = hometeam;
 	}
-	public Team getAwayTeam() {
-		return awayTeam;
+	public Team getAwayteam() {
+		return awayteam;
 	}
-	public void setAwayTeam(Team awayTeam) {
-		this.awayTeam = awayTeam;
+	public void setAwayteam(Team awayteam) {
+		this.awayteam = awayteam;
 	}
 	
 }

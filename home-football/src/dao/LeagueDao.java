@@ -15,7 +15,7 @@ public class LeagueDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<League> getLeguesByNationNo(int nationNo) throws SQLException {
-		return IbatisUtils.getSqlMapClient().queryForList("league.getLeguesByNationNo", nationNo);
+	public List<League> getLeaguesByNationNo(int nationNo) throws SQLException {
+		return IbatisUtils.getSqlMapClient().queryForList("league.getLeaguesByNationNo", nationNo);
 	}
 }

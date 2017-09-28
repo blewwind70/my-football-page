@@ -27,8 +27,8 @@ public class NationInfoServlet extends HttpServlet {
 		int nationNo = StringUtils.stringToNumber(request.getParameter("nation"));
 		if(nationNo != 0) {
 			try {
-				List<League> leagueList = LeagueDao.getInstance().getLeguesByNationNo(nationNo);
-				response.setContentType("text/plain;charset=utf-8");
+				List<League> leagueList = LeagueDao.getInstance().getLeaguesByNationNo(nationNo);
+				response.setContentType("application/json; charset=utf-8");
 				
 				PrintWriter pw = response.getWriter();
 				String json = new Gson().toJson(leagueList);
