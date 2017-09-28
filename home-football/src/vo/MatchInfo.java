@@ -6,7 +6,7 @@ public class MatchInfo {
 
 	private int no;
 	private int round;
-	private Date matchDate;
+	private Date matchdate;
 	private League league;
 	
 	public int getNo() {
@@ -21,11 +21,11 @@ public class MatchInfo {
 	public void setRound(int round) {
 		this.round = round;
 	}
-	public Date getMatchDate() {
-		return matchDate;
+	public Date getMatchdate() {
+		return matchdate;
 	}
-	public void setMatchDate(Date matchDate) {
-		this.matchDate = matchDate;
+	public void setMatchdate(Date matchdate) {
+		this.matchdate = matchdate;
 	}
 	public League getLeague() {
 		return league;

@@ -7,113 +7,84 @@
 <sqlMap namespace="match">
 
 	<typeAlias alias="MatchInfo" type="vo.MatchInfo"/>
-	<typeAlias alias="MatchTeam" type="vo.MatchTeam"/>
+	<typeAlias alias="Match" type="vo.Match"/>
 	<typeAlias alias="Criteria" type="vo.Criteria"/>
 	
 	<insert id="addMatchInfo" parameterClass="MatchInfo">
-		insert into fb_match_info (fb_match_info_no, fb_match_info_round, fb_match_info_date, fb_league_no)
-		values (#no#, #round#, #matchDate#, #league.no#)
+		insert into fb_match_info (fb_match_info_no, fb_match_info_round, fb_match_info_matchdate, fb_league_no)
+		values (fb_match_info_seq.nextval, #round#, #matchdate#, #league.no#)
 	</insert>
 	
-	<insert id="addMatchTeam" parameterClass="MatchTeam">
-		insert into fb_match_team (fb_match_team_no, fb_match_home_team_score, fb_home_team_no, fb_match_info_no, fb_match_away_team_score, fb_away_team_no)
-		values (fb_match_team_seq.nextval, #homeScore#, #homeTeam.no#, #matchInfo.no#, #awayScore#, #awayTeam.no#)
+	<insert id="addMatch" parameterClass="Match">
+		insert into fb_match (fb_match_no, fb_hometeam_score, fb_awayteam_score, fb_match_info_no, fb_hometeam_no, fb_awayteam_no)
+		values (fb_match_seq.nextval, #homeScore#, #awayScore#, #matchInfo.no#, #hometeam.no#, #awayteam.no# )
 	</insert>
 	
-	<select id="getMatchInfoSequence" resultClass="int">
-		select fb_match_info_seq.nextval from dual
+	<select id="getMatchByMatchNo" parameterClass="int" resultClass="Match">
+		select
+			info.fb_match_info_no			"matchInfo.no"
+			,info.fb_match_info_round		"matchInfo.round"
+			,info.fb_match_info_matchdate	"matchInfo.matchdate"
+			,match.fb_match_no				no
+			,match.fb_match_result			result
+			,match.fb_hometeam_no			"hometeam.no"
+			,home.fb_team_name				"hometeam.name"
+			,match.fb_awayteam_no			"awayteam.no"
+			,away.fb_team_name				"awayteam.name"
+			,match.fb_hometeam_score		homeScore
+			,match.fb_awayteam_score		awayScore
+		from fb_match_info info, fb_match match, fb_team home, fb_team away
+		where info.fb_match_info_no = match.fb_match_info_no 
+		and match.fb_hometeam_no = home.fb_team_no
+		and match.fb_awayteam_no = away.fb_team_no
+		and match.fb_match_no = #value#
 	</select>
 	
-	<select id="getMatchByMatchNo" parameterClass="int" resultClass="MatchTeam">
-				select 
-			info.fb_league_no					"league.no"
-			,info.fb_match_info_no				"matchInfo.no"
-			,info.fb_match_info_round			"matchInfo.round"
-			,info.fb_match_info_date			"matchInfo.date"
-			,home.fb_match_team_no				no
-			,home.fb_match_result				result
-			,home.fb_home_team_no				"homeTeam.no"
-			,home.fb_team_name					"homeTeam.name"
-			,home.fb_match_home_team_score		homeScore
-			,away.fb_away_team_no				"awayTeam.no"
-			,away.fb_team_name					"awayTeam.name"
-			,away.fb_match_away_team_score		awayScore
-		from fb_match_info info, (select 
-									A.fb_match_team_no
-									,A.fb_home_team_no
-									,B.fb_team_name
-									,A.fb_match_home_team_score
-									,A.fb_match_info_no
-									,A.fb_match_result
-								from fb_match_team A, fb_team B
-								where A.fb_home_team_no = B.fb_team_no) home, (select 
-																					C.fb_match_team_no
-																					,C.fb_away_team_no
-																					,D.fb_team_name
-																					,C.fb_match_away_team_score
-																				from fb_match_team C, fb_team D
-																				where C.fb_away_team_no = D.fb_team_no) away
-		where info.fb_match_info_no = home.fb_match_info_no
-		and home.fb_match_team_no = away.fb_match_team_no
-		and home.fb_match_team_no = #value#
-	</select>
-	
-	<select id="getMatchesByDate" parameterClass="java.util.Date" resultClass="MatchTeam">
-		select 
-			info.fb_league_no					"league.no"
-			,info.fb_match_info_no				"matchInfo.no"
-			,info.fb_match_info_round			"matchInfo.round"
-			,info.fb_match_info_date			"matchInfo.date"
-			,home.fb_match_team_no				no
-			,home.fb_match_result				result
-			,home.fb_home_team_no				"homeTeam.no"
-			,home.fb_team_name					"homeTeam.name"
-			,home.fb_match_home_team_score		homeScore
-			,away.fb_away_team_no				"awayTeam.no"
-			,away.fb_team_name					"awayTeam.name"
-			,away.fb_match_away_team_score		awayScore
-		from fb_match_info info, (select 
-									A.fb_match_team_no
-									,A.fb_home_team_no
-									,B.fb_team_name
-									,A.fb_match_home_team_score
-									,A.fb_match_info_no
-									,A.fb_match_result
-								from fb_match_team A, fb_team B
-								where A.fb_home_team_no = B.fb_team_no) home, (select 
-																					C.fb_match_team_no
-																					,C.fb_away_team_no
-																					,D.fb_team_name
-																					,C.fb_match_away_team_score
-																				from fb_match_team C, fb_team D
-																				where C.fb_away_team_no = D.fb_team_no) away
-		where info.fb_match_info_no = home.fb_match_info_no
-		and home.fb_match_team_no = away.fb_match_team_no
-		and info.fb_match_info_date >= #value#
+	<select id="getMatchesByDate" parameterClass="java.util.Date" resultClass="Match">
+		select
+			info.fb_match_info_no			"matchInfo.no"
+			,info.fb_match_info_round		"matchInfo.round"
+			,info.fb_match_info_matchdate	"matchInfo.matchdate"
+			,match.fb_match_no				no
+			,match.fb_match_result			result
+			,match.fb_hometeam_no			"hometeam.no"
+			,home.fb_team_name				"hometeam.name"
+			,match.fb_awayteam_no			"awayteam.no"
+			,away.fb_team_name				"awayteam.name"
+			,match.fb_hometeam_score		homeScore
+			,match.fb_awayteam_score		awayScore
+		from fb_match_info info, fb_match match, fb_team home, fb_team away
+		where info.fb_match_info_no = match.fb_match_info_no 
+		and match.fb_hometeam_no = home.fb_team_no
+		and match.fb_awayteam_no = away.fb_team_no
+		and info.fb_match_info_matchdate >= #value#
 		<![CDATA[
-		and info.fb_match_info_date < #value# + 1 
+		and info.fb_match_info_matchdate < #value# + 1
 		]]>
-		order by info.fb_match_info_date
 	</select>
 	
-	<select id="getMatchInfoByMatch" parameterClass="MatchInfo" resultClass="MatchInfo">
+	<select id="getMatchInfoByMatchInfo" parameterClass="MatchInfo" resultClass="MatchInfo">
 		select 
-			fb_match_info_no		no
-			,fb_match_info_round	round
-			,fb_match_info_date		matchDate
-			,fb_league_no			"league.no"
+			fb_match_info_no			no
+			,fb_match_info_round		round
+			,fb_match_info_matchdate	matchdate
+			,fb_league_no				"league.no"
 		from fb_match_info
 		where fb_league_no = #league.no#
+		and fb_match_info_matchdate = #matchdate#
 		and fb_match_info_round = #round#
-		and fb_match_info_date = #matchDate#
 	</select>
 	
-	<update id="updateMatchTeamByMatchNo" parameterClass="MatchTeam">
-		update fb_match_team
+	<update id="updateMatchByMatchNo" parameterClass="Match">
+		update fb_match
 		set
-			fb_match_home_team_score = #homeScore#
-			,fb_match_away_team_score = #awayScore#
+			fb_match_no	= #no#
 			,fb_match_result = #result#
-		where fb_match_team_no = #no#
+			,fb_hometeam_score = #homeScore#
+			,fb_awayteam_score = #awayScore#
+			,fb_match_info_no = #matchInfo.no#
+			, fb_hometeam_no = #hometeam.no#
+			, fb_awayteam_no = #awayteam.no#
+		where fb_match_no = #no#
 	</update>
 </sqlMap>

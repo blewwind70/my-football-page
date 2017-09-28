@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import commons.Controller;
 import dao.MatchDao;
 import util.DateUtils;
-import vo.MatchTeam;
+import vo.Match;
 
 public class ListController implements Controller {
 	
@@ -31,7 +31,7 @@ public class ListController implements Controller {
 			throw new SQLException(e);
 		}
 		
-		List<MatchTeam> matchList = MatchDao.getInstance().getMatchesByDate(selectedDate);
+		List<Match> matchList = MatchDao.getInstance().getMatchesByDate(selectedDate);
 		request.setAttribute("cp", "list");
 		request.setAttribute("matchdate", matchDate);
 		request.setAttribute("matchList", matchList);

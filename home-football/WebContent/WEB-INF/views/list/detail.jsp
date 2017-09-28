@@ -14,6 +14,13 @@
 			$("#btn-updateform").on("click", function() {
 				$("#update-form").css("display", "");
 			});
+			
+			$(":input[name=homescore], :input[name=awayscore]").on("change", function() {
+				if($(this).val() > 38 || $(this).val() <= 0) {
+					alert("옳지 않은 라운드 값입니다.");
+					$(this).val("");
+				}
+			});
 		});
 	</script>
 </head>
@@ -33,9 +40,9 @@
 	            <div class="panel panel-info">
 	                <div class="panel-heading text-center">
 	                    <h3>
-	                    	${matchTeam.homeTeam.name }
-	                    	<span>${matchTeam.homeScore } - ${matchTeam.awayScore }</span>
-	                    	${matchTeam.awayTeam.name }
+	                    	${match.hometeam.name }
+	                    	<span>${match.homeScore } - ${match.awayScore }</span>
+	                    	${match.awayteam.name }
 	                    	<button class="btn btn-xs" id="btn-updateform">점수 수정</button>
 	                    </h3>
 	                </div>
@@ -43,15 +50,15 @@
 	                	<form method="post" action="update.home" style="display:none;" id="update-form">
 	                		<div class="row pull-right">
 	                			<div class="form-group">
-			                		<input type="hidden" name="mno" value="${matchTeam.no }"/>
+			                		<input type="hidden" name="mno" value="${match.no }"/>
 			                		<div class="col-sm-2">
-				                		<input type="number" name="homescore" value="${matchTeam.homeScore }" class="form-control"/>
+				                		<input type="number" name="homescore" value="${match.homeScore }" min="0" class="form-control"/>
 			                		</div>
 			                		<div class="col-sm-1">
 				                		<label class="control-label"> - </label>
 			                		</div>
 			                		<div class="col-sm-2">
-				                		<input type="number" name="awayscore" value="${matchTeam.awayScore }" class="form-control"/>
+				                		<input type="number" name="awayscore" value="${match.awayScore }" min="0" class="form-control"/>
 			                		</div>
 			                		<button class="btn btn-success btn-xm">수정</button>
 	                			</div>

@@ -57,9 +57,13 @@
 	                        <c:forEach var="forMatch" items="${matchList }">
 	                        	<tr>
 		                            <td>${forMatch.result }</td>
-		                            <td>${forMatch.homeTeam.name }</td>
-		                            <td><a href="detail.home?mno=${forMatch.no }">${forMatch.homeScore } - ${forMatch.awayScore }</a></td>
-		                            <td class="text-right">${forMatch.awayTeam.name }</td>
+		                            <td>${forMatch.hometeam.name }</td>
+		                            <td>
+		                            <c:if test="${forMatch.homeScore ne null }">
+		                            	<a href="detail.home?mno=${forMatch.no }">${forMatch.homeScore } - ${forMatch.awayScore }</a>
+		                            </c:if>
+		                            </td>
+		                            <td class="text-right">${forMatch.awayteam.name }</td>
 	                            </tr>                        
 	                        </c:forEach>
 	                        </tbody>

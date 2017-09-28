@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import commons.Controller;
 import dao.MatchDao;
 import util.StringUtils;
-import vo.MatchTeam;
+import vo.Match;
 
 public class UpdateController implements Controller {
 
@@ -21,7 +21,7 @@ public class UpdateController implements Controller {
 		
 		MatchDao matchDao = MatchDao.getInstance();
 		
-		MatchTeam matchTeam = matchDao.getMatchByMatchNo(matchTeamNo);
+		Match matchTeam = matchDao.getMatchByMatchNo(matchTeamNo);
 		matchTeam.setHomeScore(homeScore);
 		matchTeam.setAwayScore(awayScore);
 		matchTeam.setResult("FT");

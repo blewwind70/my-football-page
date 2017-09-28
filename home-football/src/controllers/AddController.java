@@ -14,7 +14,7 @@ import util.DateUtils;
 import util.StringUtils;
 import vo.League;
 import vo.MatchInfo;
-import vo.MatchTeam;
+import vo.Match;
 import vo.Team;
 
 public class AddController implements Controller {
@@ -53,7 +53,7 @@ public class AddController implements Controller {
 			Team homeTeam = teamDao.getTeamByTeamNo(hometeamNo);
 			Team awayTeam = teamDao.getTeamByTeamNo(awayteamNo);
 			
-			MatchTeam matchTeam = new MatchTeam();
+			Match matchTeam = new Match();
 			matchTeam.setHomeTeam(homeTeam);
 			matchTeam.setAwayTeam(awayTeam);
 			matchTeam.setMatchInfo(searchMatch);

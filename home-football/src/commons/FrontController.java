@@ -13,6 +13,7 @@ import controllers.AddController;
 import controllers.AddFormController;
 import controllers.DetailController;
 import controllers.ListController;
+import controllers.RankController;
 import controllers.RoundController;
 import controllers.UpdateController;
 
@@ -40,6 +41,8 @@ public class FrontController extends HttpServlet{
 			controller = new DetailController();
 		} else if(uri.endsWith("update.home")) {
 			controller = new UpdateController();
+		} else if(uri.endsWith("rank.home")) {
+			controller = new RankController();
 		}
 		
 		try {

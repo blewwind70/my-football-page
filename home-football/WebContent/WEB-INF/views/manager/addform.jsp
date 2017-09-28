@@ -11,60 +11,81 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script>
 		$(function() {
-			var nationSelector = $("#nation-selector");
-			var leagueSelector = $("#league-selector");
+			var $nationSelector = $("#nation-selector");
+			var $leagueSelector = $("#league-selector");
 			
-			nationSelector.on("change", function() {
-				leagueSelector.empty();
-				leagueSelector.append("<option value='' selected='selected'>선택</option>");
+			$nationSelector.on("change", function() {
+				$leagueSelector.empty();
+				$leagueSelector.append("<option value='' selected>선택</option>");
 				
-				var xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function() {
-					if(xhr.readyState == 4 && xhr.status == 200) {
-						var leagueList = JSON.parse(xhr.responseText);
-						
-						for(var i=0;i<leagueList.length;i++) {
-							leagueSelector.append("<option value=" + leagueList[i].no + ">" + leagueList[i].name + "</option>");
-						}
-						
+				$.ajax({
+					type:"GET",
+					url:"nation.find",
+					data:{nation:$nationSelector.val()},
+					dataType:"json",
+					success: function(result) {
+						$(result).each(function() {
+							$leagueSelector.append("<option value=" + this.no + ">" + this.name + "</option>"); 
+						});
+					}, 
+					error: function() {
+						console.log("league fail");	
 					}
-				}
-				
-				xhr.open("GET", "nation.find?nation=" + nationSelector.val());
-				xhr.send(null);
+				});
 			});
 			
 			$("#round-input").on("change", function() {
-				if($("#round-input").val() > 38) {
+				if($(this).val() > 38 || $(this).val() <= 0) {
 					alert("옳지 않은 라운드 값입니다.");
-					$("#round-input").val("");
+					$(this).val("");
 				}
 			});
 			
-			leagueSelector.on("change", function() {
-				var homeTeam = $("#hometeam-selector");
-				var awayTeam = $("#awayteam-selector");
+			$leagueSelector.on("change", function() {
+				var $homeTeam = $(".hometeam-selector");
+				var $awayTeam = $(".awayteam-selector");
 				
-				homeTeam.empty();
-				awayTeam.empty();
-				homeTeam.append("<option value='' selected='selected'>선택</option>");
-				awayTeam.append("<option value='' selected='selected'>선택</option>");
+				$homeTeam.empty().append("<option value='' selected>선택</option>");
+				$awayTeam.empty().append("<option value='' selected>선택</option>");
 				
-				var xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function() {
-					if(xhr.readyState == 4 && xhr.status == 200) {
-						var teamList = JSON.parse(xhr.responseText);
-						
-						for(var i=0;i<teamList.length;i++) {
-							homeTeam.append("<option value=" + teamList[i].no + ">" + teamList[i].name + "</option>");
-							awayTeam.append("<option value=" + teamList[i].no + ">" + teamList[i].name + "</option>");
-						}
-						
+				$.ajax({
+					type:"GET",
+					url:"team.find",
+					data:{league:$leagueSelector.val()},
+					dataType:"json",
+					success: function(result) {
+						$(result).each(function() {
+							$homeTeam.append("<option value=" + this.no + ">" + this.name + "</option>")
+							$awayTeam.append("<option value=" + this.no + ">" + this.name + "</option>")
+						});
+					},
+					error: function() {
+						console.log("team fail");
 					}
-				}
+	
+				});
+			});
+			
+			$("#team-table span#btn-add").on("click", function() {
+				$("#team-table tbody").append($("#team-table tbody tr:first").clone().show());
+			});
+			
+			$("#team-table").on("click", "span.btn-delete", function() {
+				$(this).parents("tr").remove();
+			});
+			
+			$("#match-form").on("submit", function(event) {
+				var hometeamNo = "";
+				$(".hometeam-selector:not(:first)").each(function() {
+					hometeamNo += $(this).val() + ",";
+				});
+				$(":input[name=hometeam]").val(hometeamNo);
 				
-				xhr.open("GET", "team.find?league=" + leagueSelector.val());
-				xhr.send(null);
+				var awayteamNo = "";
+				$(".awayteam-selector:not(:first)").each(function() {
+					awayteamNo += $(this).val() + ",";
+				});
+				$(":input[name=awayteam]").val(awayteamNo);
 			});
 		});
 	</script>
@@ -77,7 +98,7 @@
 		</div>
 			
 		<div class="row">
-			<form method="post" action="add.home" class="form-horizontal">
+			<form method="post" action="add.home" class="form-horizontal" id="match-form">
 				<div class="row">
 					<div class="form-group col-sm-5">
 						<label class="control-label col-sm-3">대회 국가</label>
@@ -105,7 +126,7 @@
 					<div class="form-group col-sm-5">
 						<label class="control-label col-sm-3">라운드</label>
 						<div class="col-sm-9">
-							<input type="number" name="round" class="form-control" max="38" id="round-input"/>
+							<input type="number" name="round" class="form-control" min="0" max="38" id="round-input"/>
 						</div>
 					</div>
 					
@@ -121,24 +142,52 @@
 				</div>
 				
 				<div class="row">
-					<div class="form-group col-sm-5">
-						<label class="control-label col-sm-3">HOME</label>
-						<div class="col-sm-9">
-							<select name="hometeam" class="form-control" id="hometeam-selector">
-								<option value="" selected="selected">선택</option>
-							</select>
-						</div>
-					</div>
-					
-					<div class="form-group col-sm-5">
-						<label class="control-label col-sm-3">AWAY</label>
-						<div class="col-sm-9">
-							<select name="awayteam" class="form-control" id="awayteam-selector">
-								<option value="" selected="selected">선택</option>
-							</select>
-						</div>
-					</div>
+					<table class="table table-condensed table-striped" id="team-table">
+						<colgroup>
+							<col width="5%">							
+							<col width="45%">							
+							<col width="45%">							
+							<col width="5%">							
+						</colgroup>
+						<thead>
+							<tr>
+								<th><span class="glyphicon glyphicon-plus-sign btn" id="btn-add"></span></th><th>Home</th><th>Away</th><th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr style="display:none;">
+								<td></td>
+								<td>
+									<select class="form-control hometeam-selector">
+										<option value="" selected>선택</option>
+									</select>
+								</td>
+								<td>
+									<select class="form-control awayteam-selector">
+										<option value="" selected>선택</option>
+									</select>
+								</td>
+								<td><span class="glyphicon glyphicon-minus-sign btn btn-delete"></span></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<select class="form-control hometeam-selector">
+										<option value="" selected>선택</option>
+									</select>
+								</td>
+								<td>
+									<select class="form-control awayteam-selector">
+										<option value="" selected>선택</option>
+									</select>
+								</td>
+								<td><span class="glyphicon glyphicon-minus-sign btn btn-delete"></span></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
+				<input type="hidden" name="hometeam" />
+				<input type="hidden" name="awayteam" />
 				<button type="submit" class="btn btn-success pull-right">등록</button>
 			</form>
 		</div>
