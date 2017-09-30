@@ -13,6 +13,8 @@
   <script type="text/javascript">
   	$(function() {
   		var $rankTableTr = $("#rank-table tbody tr");
+
+  		$("#rank-table th").css("cursor", "pointer");
   		
   		$rankTableTr.each(function() {
   			var win = parseInt($(this).find("td.win-td").text());
@@ -28,8 +30,71 @@
   			$(this).find("td.gd-td").text(gf - ga);
   		});
   		
-  		$rankTableTr.find("td.points-td").sort(function(a,b) {
-  			return a-b;
+  		function sortTableByCondition(conditionSelector) {
+	  		$rankTableTr.sort(function(a, b) {
+	  			var aValue = $(a).find(conditionSelector).text();
+	  			var bValue = $(b).find(conditionSelector).text();
+	  			
+	  			if(aValue > bValue) {
+	  				return -1;
+	  			}
+	  			if(aValue < bValue) {
+	  				return 1;
+	  			}
+	  			if(aValue == bValue) {
+	  				return 0;
+	  			}
+  			});
+  		};
+  		
+  		$("#points-th").on("click", function() {
+	  		$rankTableTr.sort(function(a, b) {
+	  			var aPoints = $(a).find("td.points-td").text();
+	  			var bPoints = $(b).find("td.points-td").text();
+	  			
+	  			if(aPoints > bPoints) {
+	  				return -1;
+	  			}
+	  			if(aPoints < bPoints) {
+	  				return 1;
+	  			}
+	  			if(aPoints == bPoints) {
+	  				var aGd = $(a).find("td.gd-td").text();
+	  				var bGd = $(b).find("td.gd-td").text();
+	  				
+	  				if(aGd > bGd) {
+	  					return -1;
+	  				}
+	  				if(aGd < bGd) {
+	  					return 1;
+	  				}
+	  				if(aGd == bGd) {
+		  				var aGf = $(a).find("td.gf-td").text();
+		  				var bGf = $(b).find("td.gf-td").text();
+		  				
+		  				if(aGf > bGf) {
+		  					return -1;
+		  				}
+		  				if(aGf < bGf) {
+		  					return 1;
+		  				}
+		  				if(aGf == bGf) {
+		  					return 0;
+		  				}
+	  				}
+	  			}
+	  		});
+  		});
+  		$("#points-th").trigger("click");
+  		
+  		$("#gd-th").on("click", function() {sortTableByCondition("td.gd-td")});
+  		
+  		$("#rank-table tbody").empty();
+		var rankIndex = 1;
+  		$rankTableTr.each(function() {
+ 			$(this).find("td.position-td").text(rankIndex);
+ 			rankIndex++;
+  			$("#rank-table tbody").append("<tr>" + $(this).html() + "</tr>");
   		});
   	});
   </script>
@@ -52,8 +117,8 @@
 						<tr>
 							<th>Position</th><th>Team</th><th>Round</th>
 							<th>W</th><th>D</th><th>L</th>
-							<th>GF</th><th>GA</th><th>GD</th>
-							<th>Points</th>
+							<th>GF</th><th>GA</th><th id="gd-th">GD</th>
+							<th id="points-th">Points</th>
 						</tr>
 					</thead>
 					<tbody>

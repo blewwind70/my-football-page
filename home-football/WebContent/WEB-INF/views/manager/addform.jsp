@@ -105,10 +105,12 @@
 						<div class="col-sm-9">
 							<select name="nation" class="form-control" id="nation-selector">
 								<option value="" selected="selected">선택</option>
-								<option value="1">England</option>
-								<option value="2">Spain</option>
-								<option value="3">Germany</option>
-								<option value="4">Italy</option>
+								<option value="1">World</option>
+								<option value="2">Euro</option>
+								<option value="3">England</option>
+								<option value="4">Spain</option>
+								<option value="5">Germany</option>
+								<option value="6">Italy</option>
 							</select>
 						</div>
 					</div>

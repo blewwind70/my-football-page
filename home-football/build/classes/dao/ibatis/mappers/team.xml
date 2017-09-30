@@ -36,6 +36,7 @@
 			from fb_match match, fb_match_info info
 			where match.fb_match_info_no = info.fb_match_info_no
 			and info.fb_league_no = #value#
+			and match.fb_match_result &lt;&gt; 'NT'
 			and match.fb_hometeam_score &gt; match.fb_awayteam_score
 			group by match.fb_hometeam_no) A,  (select match.fb_awayteam_no, count(*) acn
 											from fb_match match, fb_match_info info
@@ -56,6 +57,7 @@
 			from fb_match match, fb_match_info info
 			where match.fb_match_info_no = info.fb_match_info_no
 			and info.fb_league_no = #value#
+			and match.fb_match_result &lt;&gt; 'NT'
 			and match.fb_hometeam_score = match.fb_awayteam_score
 			group by match.fb_hometeam_no) A,  (select match.fb_awayteam_no, count(*) acn
 											from fb_match match, fb_match_info info
@@ -65,7 +67,7 @@
 											group by match.fb_awayteam_no) B, fb_team C
 		where C.fb_team_no = A.fb_hometeam_no(+)
 		and C.fb_team_no = B.fb_awayteam_no (+)
-		order by C.fb_team_no	
+		order by C.fb_team_no		
 	</select>
 	
 	<select id="getTotalLoseByLeagueNo" parameterClass="int" resultClass="java.util.HashMap">
@@ -76,6 +78,7 @@
 			from fb_match match, fb_match_info info
 			where match.fb_match_info_no = info.fb_match_info_no
 			and info.fb_league_no = #value#
+			and match.fb_match_result &lt;&gt; 'NT'
 			and match.fb_hometeam_score &lt; match.fb_awayteam_score
 			group by match.fb_hometeam_no) A,  (select match.fb_awayteam_no, count(*) acn
 											from fb_match match, fb_match_info info
@@ -96,6 +99,7 @@
 			from fb_match match, fb_match_info info
 			where match.fb_match_info_no = info.fb_match_info_no
 			and info.fb_league_no = #value#
+			and match.fb_match_result &lt;&gt; 'NT'
 			group by match.fb_hometeam_no) A,  (select match.fb_awayteam_no, sum(fb_awayteam_score) asum
 											from fb_match match, fb_match_info info
 											where match.fb_match_info_no = info.fb_match_info_no
@@ -114,6 +118,7 @@
 			from fb_match match, fb_match_info info
 			where match.fb_match_info_no = info.fb_match_info_no
 			and info.fb_league_no = #value#
+			and match.fb_match_result &lt;&gt; 'NT'
 			group by match.fb_hometeam_no) A,  (select match.fb_awayteam_no, sum(fb_hometeam_score) asum
 											from fb_match match, fb_match_info info
 											where match.fb_match_info_no = info.fb_match_info_no
