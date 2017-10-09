@@ -52,32 +52,26 @@
 	  			var aPoints = $(a).find("td.points-td").text();
 	  			var bPoints = $(b).find("td.points-td").text();
 	  			
-	  			if(aPoints > bPoints) {
-	  				return -1;
+	  			if (aPoints != bPoints) {	  				
+					return bPoints-aPoints;
 	  			}
-	  			if(aPoints < bPoints) {
-	  				return 1;
-	  			}
+	  			
 	  			if(aPoints == bPoints) {
 	  				var aGd = $(a).find("td.gd-td").text();
 	  				var bGd = $(b).find("td.gd-td").text();
 	  				
-	  				if(aGd > bGd) {
-	  					return -1;
+	  				if(aGd != bGd) {
+						return bGd - aGd;	  					
 	  				}
-	  				if(aGd < bGd) {
-	  					return 1;
-	  				}
+	  				
 	  				if(aGd == bGd) {
 		  				var aGf = $(a).find("td.gf-td").text();
 		  				var bGf = $(b).find("td.gf-td").text();
 		  				
-		  				if(aGf > bGf) {
-		  					return -1;
-		  				}
-		  				if(aGf < bGf) {
-		  					return 1;
-		  				}
+						if(aGf != bGf) {
+							return bGf - aGf;
+						}
+						
 		  				if(aGf == bGf) {
 		  					return 0;
 		  				}
